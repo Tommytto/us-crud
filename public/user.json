@@ -1,0 +1,22 @@
+{
+  "userList": [
+    {
+      "id": 1,
+      "name": "Semen",
+      "age": 22,
+      "salary": 150000
+    },
+    {
+      "id": 2,
+      "name": "Timur",
+      "age": 21,
+      "salary": 75000
+    },
+    {
+      "id": 3,
+      "name": "Kekus",
+      "age": 22,
+      "salary": 20000
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+    "treeList": [
+        {
+            "id": 0,
+            "color": "red",
+            "appleList": [
+                {
+                    "id": 0,
+                    "color": "red"
+                },
+                {
+                    "id": 1,
+                    "color": "red"
+                }
+            ]
+        },
+        {
+            "id": 1,
+            "color": "green",
+            "appleList": [
+                {
+                    "id": 2,
+                    "color": "green"
+                },
+                {
+                    "id": 3,
+                    "color": "green"
+                }
+            ]
+        }
+    ]
+}

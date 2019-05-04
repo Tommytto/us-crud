@@ -2,18 +2,77 @@ import { useDispatch, useSelector } from "react-redux";
 import React from "react";
 import { createAction, createReducer } from "store/utils";
 
+function getInitialState() {
+    return {
+        data: {},
+        list: [],
+        modals: {
+            create: false,
+            update: false,
+            delete: false
+        },
+        isLoading: false
+    };
+}
+
+function getSelectors(name) {
+    const selectState = state => state[name];
+    const selectData = state => selectState(state).data;
+    return {
+        selectList: state => selectState(state).list,
+        selectData,
+        selectDataList: state => Object.values(selectData(state)),
+        selectOne: (state, id) => selectData(state)[id],
+        selectIsLoading: state => selectState(state).isLoading,
+        ...generateModalSelectors(selectState)
+    };
+}
+
+const MODAL_TYPES = {
+    create: "create",
+    update: "update",
+    delete: "delete"
+};
+
+function getModalName(modalType) {
+    return modalType.charAt(0).toUpperCase() + modalType.substring(1) + "Modal";
+}
+
+function generateModalActions(modalAction) {
+    return Object.keys(MODAL_TYPES).reduce((result, modalType) => {
+        const modalName = getModalName(modalType);
+        const createFunc = {
+            [`show${modalName}`]: () =>
+                modalAction({ type: modalType, isVisible: true }),
+            [`hide${modalName}`]: () =>
+                modalAction({ type: modalType, isVisible: false })
+        };
+        return {
+            ...result,
+            ...createFunc
+        };
+    }, {});
+}
+
+function generateModalSelectors(selectState) {
+    return Object.keys(MODAL_TYPES).reduce((result, modalType) => {
+        const modalName = getModalName(modalType);
+
+        return {
+            ...result,
+            [`selectIsActive${modalName}`]: state => selectState(state).modals[modalType]
+        };
+    }, {});
+}
+
 export function createModel(name) {
     const addOne = createAction("Add one");
     const addMany = createAction("Add many");
-
     const startLoading = createAction("Loading start");
     const stopLoading = createAction("Loading stop");
+    const changeModalVisibility = createAction("Show/hide modal");
+    const initialState = getInitialState();
 
-    const initialState = {
-        data: {},
-        list: [],
-        isLoading: false
-    };
     const reducer = createReducer(
         {
             [addMany]: (state, { data, list }) => ({
@@ -36,6 +95,13 @@ export function createModel(name) {
             [stopLoading]: state => ({
                 ...state,
                 isLoading: false
+            }),
+            [changeModalVisibility]: (state, { type, isVisible }) => ({
+                ...state,
+                modals: {
+                    ...state.modals,
+                    [type]: isVisible
+                }
             })
         },
         initialState
@@ -55,40 +121,30 @@ export function createModel(name) {
     }
 
     return {
+        getName: () => name,
         getReducer: () => reducer,
-        selectors: {
-            selectList: state => state[name].list,
-            selectData: state => state[name].data,
-            selectOne: (state, id) => state[name].data[id],
-            selectIsLoading: state => state[name].isLoading
-        },
+        selectors: getSelectors(name),
         actions: {
             addOne,
             addMany,
-            loadMany
+            loadMany,
+            ...generateModalActions(changeModalVisibility)
         }
     };
 }
 
-export const userModel = createModel("user");
 
-export function fromStore(Component, selector) {
-    const WrappedComponent = React.memo(Component);
-    return props => {
-        let data = {};
-        if (typeof selector === "object") {
-            Object.keys(selector).forEach(key => {
-                const handler = selector[key];
-                data[key] = useSelector(state => handler(state, props));
-            }, {});
-        } else {
-            data = useSelector(state => selector(state, props));
-        }
-        return <WrappedComponent {...props} {...data} />;
+export function fromStore(selector) {
+    return Component => {
+        const WrappedComponent = React.memo(Component);
+        return props => {
+            const data = useSelector(state => selector(state, props));
+            return <WrappedComponent {...props} {...data} />;
+        };
     };
 }
 
-export function useModel(model) {
+export function useModelActions(model) {
     const dispatch = useDispatch();
 
     return Object.keys(model.actions).reduce((result, key) => {
@@ -98,3 +154,5 @@ export function useModel(model) {
         };
     }, {});
 }
+
+export const userModel = createModel("user");

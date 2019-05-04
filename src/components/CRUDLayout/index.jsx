@@ -1,13 +1,14 @@
 import React from "react";
-import CRUDListWrapper from "components/CRUDListWrapper";
+import {useCRUDComponent} from "logic/hooks";
 
-export const CRUDConfigContext = React.createContext(null);
-
-const CRUDLayout = ({ config, model }) => {
+const CRUDLayout = () => {
+    const {Header, ListContainer, CreateModalContainer} = useCRUDComponent();
     return (
-        <CRUDConfigContext.Provider value={config}>
-            <CRUDListWrapper model={model} />
-        </CRUDConfigContext.Provider>
+        <>
+            <Header />
+            <ListContainer />
+            <CreateModalContainer />
+        </>
     );
 };
 

@@ -1,13 +1,6 @@
 import React, { useEffect } from "react";
-import { useModel, userModel } from "store/model";
-import CRUDLayout from "components/CRUDLayout";
-import CRUDRow from "components/CRUDRow";
-import CRUDList from "components/CRUDList";
-
-const CRUDConfig = {
-    Row: CRUDRow,
-    List: CRUDList
-};
+import { useModelActions, userModel } from "store/model";
+import CRUDContainer from "components/CRUDContainer";
 
 function normalizeUser(data) {
     return data.userList.reduce(
@@ -30,26 +23,53 @@ async function loadData(url) {
     })
 }
 
+const fieldConfig = {
+    name: {
+        type: "text",
+        name: 'name',
+        label: 'Имя',
+        placeholder: 'Введите имя',
+    },
+    age: {
+        name: 'age',
+        label: 'Возраст',
+        placeholder: 'Введите возраст',
+    },
+    date: {
+        Component: () => {},
+    },
+    salary: {
+        name: 'salary',
+        type: "range",
+        label: 'Зарплата',
+        fieldProps: {
+            from: 0,
+            to: 90000,
+            step: 1000,
+        }
+    }
+};
+
 const UserList = () => {
-    const { addOne, loadMany } = useModel(userModel);
+    const { loadMany, addOne } = useModelActions(userModel);
 
     useEffect(() => {
         loadMany(loadData("/user.json"), normalizeUser);
     }, []);
 
-    function addUser() {
+    function handleClick() {
         addOne({
             id: Date.now(),
-            name: Date.now() % 10,
-            age: Math.round(Math.random() * 20),
-            salary: Math.round(Math.random() * 10000)
-        });
+            name: Date.now(),
+            age: 0,
+            salary: 0,
+        })
     }
 
     return (
         <div>
-            <button onClick={addUser}>Add one</button>
-            <CRUDLayout model={userModel} config={CRUDConfig} />
+            {/*<button onClick={handleClick}>Add one</button>*/}
+            <CRUDContainer fieldConfig={fieldConfig} model={userModel} />
         </div>
     );
 };

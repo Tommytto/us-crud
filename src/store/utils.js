@@ -6,7 +6,7 @@ export function createAction(actionName) {
         };
     }
     const uniqueId = Symbol(actionName);
-    actionCreator.toString = () => actionName;
+    actionCreator.toString = () => uniqueId;
     return actionCreator;
 }
 

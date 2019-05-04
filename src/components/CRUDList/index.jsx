@@ -1,20 +1,12 @@
-import React from "react";
-import CRUDRowWrapper from "components/CRUDRowWrapper";
+import React, { useMemo } from "react";
+import {Table} from "antd";
 
-const CRUDList = ({ list, isLoading }) => {
-    console.log(isLoading);
+const CRUDList = ({ dataList, isLoading, columns }) => {
     if (isLoading) {
         return <h1>Loading...</h1>;
     }
-    return (
-        <table>
-            <tbody>
-                {list.map(id => (
-                    <CRUDRowWrapper key={id} id={id} />
-                ))}
-            </tbody>
-        </table>
-    );
+
+    return <Table rowKey="id" dataSource={dataList} columns={columns} />;
 };
 
 export default CRUDList;

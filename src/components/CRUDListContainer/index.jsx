@@ -1,21 +1,47 @@
-import { fromStore } from "store/model";
-import React, {useMemo} from "react";
-import { useCRUDComponent } from "logic/hooks";
+import { fromStore, injectModel } from "model/hocs";
+import React, { useMemo } from "react";
+import { useCRUDBasePath, useCRUDComponent } from "logic/hooks";
 import { compose } from "redux";
-import { injectModel } from "logic/hoc";
+import { Divider } from "antd";
+import { Link } from "react-router-dom";
 
 const CRUDListContainer = props => {
     const { List } = useCRUDComponent();
+    const basePath = useCRUDBasePath();
 
     const columns = useMemo(() => {
-        return props.dataList[0] && Object.keys(props.dataList[0]).map((key) => {
-            const lowCase = key.toLowerCase();
-            return {
-                title: key,
-                dataIndex: lowCase,
-                key: lowCase,
-            }
-        })
+        const result =
+            props.dataList[0] &&
+            Object.keys(props.dataList[0]).map(key => {
+                const lowCase = key.toLowerCase();
+                return {
+                    title: key,
+                    dataIndex: lowCase,
+                    key: lowCase
+                };
+            });
+
+        if (result) {
+            result.push({
+                title: "Actions",
+                key: "action",
+                width: 150,
+                render: (text, record) => {
+                    return (
+                        <span>
+                            <Link to={`${basePath}/${record.id}/update`}>
+                                Update
+                            </Link>
+                            <Divider type="vertical" />
+                            <Link to={`${basePath}/${record.id}/delete`}>
+                                Delete
+                            </Link>
+                        </span>
+                    );
+                }
+            });
+        }
+        return result;
     }, [props.dataList]);
 
     return <List columns={columns} {...props} />;

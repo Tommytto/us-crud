@@ -1,23 +1,25 @@
 import React from "react";
-import { useModelActions } from "store/model";
 import { Form, Modal } from "antd";
-import { useCRUDComponent } from "logic/hooks";
+import { useBackToBase, useCRUDComponent } from "logic/hooks";
 import { compose } from "redux";
+import { forwardFormRef } from "logic/hoc";
 
-const CRUDCreateModal = ({ isActive, model, onCreate }) => {
+const CRUDCreateModal = ({ isActive, form, model, onCreate }) => {
     const { EntityFormContainer } = useCRUDComponent();
-    const { hideCreateModal } = useModelActions(model);
-
+    const backToBase = useBackToBase();
     return (
         <Modal
             onOk={onCreate}
-            title={'Add' + model.getName()}
-            onCancel={hideCreateModal}
+            title={"Add" + model.getName()}
+            onCancel={backToBase}
             visible={isActive}
         >
-            <EntityFormContainer />
+            <EntityFormContainer form={form} />
         </Modal>
     );
 };
 
-export default compose(Form.create({name: 'qwd '}))(CRUDCreateModal);
+export default compose(
+    Form.create(),
+    forwardFormRef
+)(CRUDCreateModal);

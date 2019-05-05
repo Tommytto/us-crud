@@ -7,7 +7,9 @@ import UserList from "components/UserList";
 import thunk from "redux-thunk";
 import "antd/dist/antd.css";
 import { Layout, Menu } from "antd";
-import {EventEmitter} from "node/events";
+import { BrowserRouter, Link } from "react-router-dom";
+import { Route, Switch } from "react-router";
+
 const { Header, Content } = Layout;
 
 const composeEnhancers =
@@ -27,28 +29,49 @@ const store = createStore(rootReducer, enhancer);
 function App() {
     return (
         <Provider store={store}>
-            <Layout>
-                <Header>
-                    <Menu
-                        theme="dark"
-                        mode="horizontal"
-                        defaultSelectedKeys={["2"]}
-                        style={{ lineHeight: "64px" }}
-                    >
-                        <Menu.Item key="1">Company</Menu.Item>
-                        <Menu.Item key="2">Users</Menu.Item>
-                    </Menu>
-                </Header>
-                <Content style={{ margin: '24px 16px 0' }}>
-                    <div style={{ padding: 24, background: '#fff', minHeight: 360 }}>
-                        <div className="ant-row">
-                            <div className="ant-col-24">
-                                <UserList />
+            <BrowserRouter>
+                <Layout>
+                    <Header>
+                        <Menu
+                            theme="dark"
+                            mode="horizontal"
+                            defaultSelectedKeys={["2"]}
+                            style={{ lineHeight: "64px" }}
+                        >
+                            <Menu.Item key="1">
+                                <Link to="/company">Companies</Link>
+                            </Menu.Item>
+                            <Menu.Item key="2">
+                                <Link to="/user">Users</Link>
+                            </Menu.Item>
+                        </Menu>
+                    </Header>
+                    <Content style={{ margin: "24px 16px 0" }}>
+                        <div
+                            style={{
+                                padding: 24,
+                                background: "#fff",
+                                minHeight: 360
+                            }}
+                        >
+                            <div className="ant-row">
+                                <div className="ant-col-24">
+                                    <Switch>
+                                        <Route
+                                            path="/company"
+                                            component={() => "company"}
+                                        />
+                                        <Route
+                                            path="/user"
+                                            component={UserList}
+                                        />
+                                    </Switch>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </Content>
-            </Layout>
+                    </Content>
+                </Layout>
+            </BrowserRouter>
         </Provider>
     );
 }

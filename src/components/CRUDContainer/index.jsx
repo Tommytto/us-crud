@@ -3,13 +3,11 @@ import {
     DEFAULT_COMPONENT_CONFIG,
     CRUDComponentConfigContext,
     CRUDFormFieldContext,
-    CRUDModelContext
+    CRUDModelContext,
+    CRUDBasePathContext
 } from "logic/context";
 
-
-
-
-const CRUDContainer = ({ config, texts, model, fieldConfig }) => {
+const CRUDContainer = ({ config, basePath, model, fieldConfig }) => {
     const resultConfig = {
         ...DEFAULT_COMPONENT_CONFIG,
         ...config
@@ -19,7 +17,9 @@ const CRUDContainer = ({ config, texts, model, fieldConfig }) => {
         <CRUDComponentConfigContext.Provider value={resultConfig}>
             <CRUDFormFieldContext.Provider value={fieldConfig}>
                 <CRUDModelContext.Provider value={model}>
-                    <resultConfig.Layout texts={texts} />
+                    <CRUDBasePathContext.Provider value={basePath}>
+                        <resultConfig.Layout />
+                    </CRUDBasePathContext.Provider>
                 </CRUDModelContext.Provider>
             </CRUDFormFieldContext.Provider>
         </CRUDComponentConfigContext.Provider>

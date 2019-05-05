@@ -1,19 +1,20 @@
 import React from "react";
 import { Form, Modal } from "antd";
-import { useBackToBase } from "logic/hooks";
+import {useBackToBase, useCRUDComponent} from "logic/hooks";
 import { compose } from "redux";
 import { forwardFormRef } from "logic/hoc";
 
-const CRUDDeleteModal = ({ isActive, name, model, onDelete }) => {
+const CRUDUpdateModal = ({ isActive, entityData, form, model, onOk }) => {
+    const { EntityFormContainer } = useCRUDComponent();
     const backToBase = useBackToBase();
     return (
         <Modal
-            onOk={onDelete}
-            title={"Delete " + model.getName()}
+            onOk={onOk}
+            title={"Update " + model.getName()}
             onCancel={backToBase}
             visible={isActive}
         >
-            Are you sure u want to delete <b>{name}</b>
+            <EntityFormContainer initialValues={entityData} form={form} />
         </Modal>
     );
 };
@@ -21,4 +22,4 @@ const CRUDDeleteModal = ({ isActive, name, model, onDelete }) => {
 export default compose(
     Form.create(),
     forwardFormRef
-)(CRUDDeleteModal);
+)(CRUDUpdateModal);

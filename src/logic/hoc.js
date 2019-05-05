@@ -1,9 +1,9 @@
-import React, {useContext} from "react";
-import {CRUDModelContext} from "logic/context";
+import React from "react";
 
-export function injectModel(Component) {
-    return function(props) {
-        const model = useContext(CRUDModelContext);
-        return <Component model={model} {...props} />;
+export function forwardFormRef(Component) {
+    return class MyComponent extends React.Component {
+        render() {
+            return <Component {...this.props} />;
+        }
     };
 }

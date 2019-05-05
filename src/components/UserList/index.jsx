@@ -1,77 +1,55 @@
 import React, { useEffect } from "react";
-import { useModelActions, userModel } from "store/model";
+import { useModelActions } from "model/hooks";
 import CRUDContainer from "components/CRUDContainer";
-
-function normalizeUser(data) {
-    return data.userList.reduce(
-        (result, user) => {
-            return {
-                list: [...result.list, user.id],
-                data: { ...result.data, [user.id]: user }
-            };
-        },
-        { list: [], data: {} }
-    );
-}
-
-async function loadData(url) {
-    const response = await fetch(url);
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            resolve(response.json())
-        }, 2000)
-    })
-}
+import { Input } from "antd";
+import { userModel } from "store/model";
+import { compose } from "redux";
+import { withRouter } from "react-router";
+import api from "logic/api";
 
 const fieldConfig = {
     name: {
-        type: "text",
-        name: 'name',
-        label: 'Имя',
-        placeholder: 'Введите имя',
+        Component: Input,
+        label: "Имя",
+        fieldProps: {
+            placeholder: "Введите имя",
+            name: "name"
+        }
     },
     age: {
-        name: 'age',
-        label: 'Возраст',
-        placeholder: 'Введите возраст',
-    },
-    date: {
-        Component: () => {},
+        Component: Input,
+        label: "Возраст",
+        fieldProps: {
+            name: "age",
+            placeholder: "Введите возраст"
+        }
     },
     salary: {
-        name: 'salary',
-        type: "range",
-        label: 'Зарплата',
+        Component: Input,
+        label: "Зарплата",
         fieldProps: {
-            from: 0,
-            to: 90000,
-            step: 1000,
+            name: "salary",
+            placeholder: "Введите зарплату"
         }
     }
 };
 
-const UserList = () => {
-    const { loadMany, addOne } = useModelActions(userModel);
+const UserList = ({ match }) => {
+    const { asyncReadMany } = useModelActions(userModel);
 
     useEffect(() => {
-        loadMany(loadData("/user.json"), normalizeUser);
+        asyncReadMany();
     }, []);
-
-    function handleClick() {
-        addOne({
-            id: Date.now(),
-            name: Date.now(),
-            age: 0,
-            salary: 0,
-        })
-    }
 
     return (
         <div>
-            {/*<button onClick={handleClick}>Add one</button>*/}
-            <CRUDContainer fieldConfig={fieldConfig} model={userModel} />
+            <CRUDContainer
+                basePath={match.path}
+                fieldConfig={fieldConfig}
+                model={userModel}
+            />
         </div>
     );
 };
 
-export default UserList;
+export default compose(withRouter)(UserList);

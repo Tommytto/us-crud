@@ -1,19 +1,17 @@
 import React from "react";
-import { useModelActions } from "store/model";
-import { Button } from "antd";
 import "./style.css";
 import { compose } from "redux";
-import { injectModel } from "logic/hoc";
+import { injectModel } from "model/hocs";
+import {useCRUDBasePath} from "logic/hooks";
+import {Link} from "react-router-dom";
 
 const CRUDHeader = ({ model }) => {
-    const { showCreateModal } = useModelActions(model);
+    const basePath = useCRUDBasePath();
 
     return (
         <div className="crud-header">
             <h1>{model.getName()} list</h1>
-            <Button
-                onClick={showCreateModal}
-            >{`Add one ${model.getName()}`}</Button>
+            <Link className="ant-btn" to={basePath + '/create'}>{`Add one ${model.getName()}`}</Link>
         </div>
     );
 };

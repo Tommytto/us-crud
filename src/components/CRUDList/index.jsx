@@ -1,5 +1,5 @@
-import React, { useMemo } from "react";
-import {Table} from "antd";
+import React from "react";
+import { Table } from "antd";
 
 const CRUDList = ({ dataList, isLoading, columns }) => {
     if (isLoading) {

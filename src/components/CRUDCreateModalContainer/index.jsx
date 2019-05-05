@@ -1,17 +1,31 @@
-import React, {useRef} from "react";
+import React, { useRef } from "react";
 import { compose } from "redux";
-import { fromStore } from "store/model";
-import { injectModel } from "logic/hoc";
-import { useCRUDComponent } from "logic/hooks";
+import { fromStore, injectModel } from "model/hocs";
+import { useBackToBase, useCRUDComponent } from "logic/hooks";
+import { useModelActions } from "model/hooks";
 
 const CRUDCreateModalContainer = props => {
     const formRef = useRef();
     const { CreateModal } = useCRUDComponent();
+
+    const { asyncCreateOne } = useModelActions(props.model);
+    const backToBase = useBackToBase();
+
     function onCreate() {
-        console.log(formRef.current);
+        const form = formRef.current.props.form;
+        const userInfo = formRef.current.props.form.getFieldsValue();
+        asyncCreateOne(userInfo);
+        backToBase();
+        form.resetFields();
     }
 
-    return <CreateModal wrappedComponentRef={(item) => formRef.current = item} {...props} onCreate={onCreate}/>;
+    return (
+        <CreateModal
+            {...props}
+            wrappedComponentRef={formRef}
+            onCreate={onCreate}
+        />
+    );
 };
 
 function mapStateToProps(state, { model }) {
@@ -22,5 +36,5 @@ function mapStateToProps(state, { model }) {
 
 export default compose(
     injectModel,
-    fromStore(mapStateToProps),
+    fromStore(mapStateToProps)
 )(CRUDCreateModalContainer);

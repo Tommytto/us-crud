@@ -1,6 +1,7 @@
 import React from "react";
-import { userModel, fromStore } from "store/model";
-import {useCRUDComponent} from "logic/hooks";
+import { userModel } from "store/model";
+import { useCRUDComponent } from "logic/hooks";
+import { fromStore } from "model/hocs";
 
 const CRUDRowContainer = props => {
     const { Row } = useCRUDComponent();

@@ -31,7 +31,42 @@ class Api {
             ]
         };
         return this.defferedRequest(users);
-    }
+    };
+
+    getCompanyList = () => {
+        const users = {
+            companyList: [
+                {
+                    id: 1,
+                    name: "Userstory",
+                    users: 50,
+                    income: 10000
+                },
+                {
+                    id: 2,
+                    name: "Google",
+                    users: 10000,
+                    income: 10000000
+                },
+            ]
+        };
+        return this.defferedRequest(users);
+    };
+
+    addCompany = data => {
+        return this.defferedRequest({
+            ...data,
+            id: Date.now()
+        });
+    };
+
+    updateCompany = data => {
+        return this.defferedRequest(data);
+    };
+
+    deleteCompany = data => {
+        return this.defferedRequest({ success: true });
+    };
 
     addUser = data => {
         return this.defferedRequest({

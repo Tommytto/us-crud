@@ -4,11 +4,14 @@ import { applyMiddleware, compose, createStore } from "redux";
 import rootReducer from "store/reducers";
 import { Provider } from "react-redux";
 import UserList from "components/UserList";
+import CompanyList from "components/CompanyList";
 import thunk from "redux-thunk";
 import "antd/dist/antd.css";
 import { Layout, Menu } from "antd";
 import { BrowserRouter, Link } from "react-router-dom";
 import { Route, Switch } from "react-router";
+import './model_v2/index'
+
 
 const { Header, Content } = Layout;
 
@@ -59,7 +62,7 @@ function App() {
                                     <Switch>
                                         <Route
                                             path="/company"
-                                            component={() => "company"}
+                                            component={CompanyList}
                                         />
                                         <Route
                                             path="/user"

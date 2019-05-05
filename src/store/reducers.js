@@ -1,8 +1,9 @@
 import { combineReducers } from "redux";
-import { userModel } from "store/model";
+import {companyModel, userModel} from "store/model";
 
 const rootReducer = combineReducers({
-    user: userModel.getReducer()
+    [userModel.getName()]: userModel.getReducer(),
+    [companyModel.getName()]: companyModel.getReducer()
 });
 
 export default rootReducer;

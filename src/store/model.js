@@ -50,12 +50,12 @@ const modelConfig = {
     }
 };
 
-export const userModel = getModel({
+export const userModel = createModel({
     ...modelConfig,
     modelName: "user"
 });
 
-export const companyModel = getModel({
+export const companyModel = createModel({
     asyncActions: {
         createOne: {
             async: api.addCompany

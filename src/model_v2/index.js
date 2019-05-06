@@ -128,6 +128,7 @@ export function getModel({ modelName, asyncActions }) {
                 asyncActions
             })
         },
+        // TODO Create Selector class
         selectors: getSelectors({ modalTypes: MODAL_TYPES, modelName })
     };
 }

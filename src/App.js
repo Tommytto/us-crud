@@ -10,7 +10,7 @@ import "antd/dist/antd.css";
 import { Layout, Menu } from "antd";
 import { BrowserRouter, Link } from "react-router-dom";
 import { Route, Switch } from "react-router";
-import './model_v2/index'
+import './model_v3/Model'
 
 
 const { Header, Content } = Layout;
@@ -60,10 +60,10 @@ function App() {
                             <div className="ant-row">
                                 <div className="ant-col-24">
                                     <Switch>
-                                        <Route
-                                            path="/company"
-                                            component={CompanyList}
-                                        />
+                                        {/*<Route*/}
+                                        {/*    path="/company"*/}
+                                        {/*    component={CompanyList}*/}
+                                        {/*/>*/}
                                         <Route
                                             path="/user"
                                             component={UserList}

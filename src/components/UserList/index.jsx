@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
-import { useModelActions } from "model/hooks";
 import CRUDContainer from "components/CRUDContainer";
 import { Input } from "antd";
 import { userModel } from "store/model";
 import { compose } from "redux";
 import { withRouter } from "react-router";
 import api from "logic/api";
+import {testModel} from "store/reducers";
+import {useModelActions} from "model_v3/hooks/use-model-actions";
 
 const fieldConfig = {
     name: {
@@ -35,18 +36,18 @@ const fieldConfig = {
 };
 
 const UserList = ({ match }) => {
-    const { asyncReadMany } = useModelActions(userModel);
+    // const { asyncReadMany } = useModelActions(testModel);
 
-    useEffect(() => {
-        asyncReadMany();
-    }, []);
+    // useEffect(() => {
+    //     asyncReadMany();
+    // }, []);
 
     return (
         <div>
             <CRUDContainer
                 basePath={match.path}
                 fieldConfig={fieldConfig}
-                model={userModel}
+                model={testModel}
             />
         </div>
     );

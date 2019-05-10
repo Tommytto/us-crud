@@ -39,7 +39,7 @@ const CRUDLayout = () => {
     return (
         <>
             <Header />
-            <ListContainer />
+            {/*<ListContainer />*/}
             <Switch>
                 <Route
                     path={[

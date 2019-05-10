@@ -8,13 +8,13 @@ const CRUDCreateModalContainer = props => {
     const formRef = useRef();
     const { CreateModal } = useCRUDComponent();
 
-    const { asyncCreateOne } = useModelActions(props.model);
+    // const { asyncCreateOne } = useModelActions(props.model);
     const backToBase = useBackToBase();
 
     function onCreate() {
         const form = formRef.current.props.form;
         const userInfo = formRef.current.props.form.getFieldsValue();
-        asyncCreateOne(userInfo);
+        // asyncCreateOne(userInfo);
         backToBase();
         form.resetFields();
     }
@@ -30,7 +30,7 @@ const CRUDCreateModalContainer = props => {
 
 function mapStateToProps(state, { model }) {
     return {
-        isActive: model.selectors.selectIsActiveCreateModal(state)
+        isActive: model.getField('modal').getSelectors().select(state, 'create')
     };
 }
 
